@@ -38,14 +38,14 @@
     bands: ['B4', 'B3', 'B2'],
   };
   
-  Map.setCenter(77.5925, 12.9407, 12);
+  Map.setCenter(-117.1801, 46.727, 12, 12);
   
   Map.addLayer(dataset.mean(), visualization, 'RGB');
 
 
 // FILTERING IMAGE COLLECTION
 
-var geometry = ee.Geometry.Point([77.60412933051538, 12.952912912328241])
+var geometry = ee.Geometry.Point([-117.1801, 46.727, 12])
   Map.centerObject(geometry, 10)
   
   var s2 = ee.ImageCollection("COPERNICUS/S2");
@@ -81,7 +81,7 @@ var geometry = ee.Geometry.Point([77.60412933051538, 12.952912912328241])
   
 // MOSAIC AND COMPOSITES
 
-  var geometry = ee.Geometry.Point([77.60412933051538, 12.952912912328241])
+  var geometry = ee.Geometry.Point([-117.1801, 46.727, 12])
 var s2 = ee.ImageCollection("COPERNICUS/S2");
 
 var rgbVis = {
@@ -103,12 +103,12 @@ Map.addLayer(medianComposite, rgbVis, 'Median Composite')
 
 // FEATURE COLLECTIONS
 
-var admin2 = ee.FeatureCollection("FAO/GAUL_SIMPLIFIED_500m/2015/level2");
+var admin2 = ee.FeatureCollection("USDOS/LSIB_SIMPLE/2017");
 
-var karnataka = admin2.filter(ee.Filter.eq('ADM1_NAME', 'Karnataka'))
+var japan = admin2.filter(ee.Filter.eq('country_na', 'Japan'))
 
 var visParams = {'color': 'red'}
-Map.addLayer(karnataka, visParams, 'Karnataka Districts')
+Map.addLayer(japan, visParams, 'Japan')
 
 // IMPORT THE DATA IN ASSET
 
@@ -119,7 +119,7 @@ Map.addLayer(karnataka, visParams, 'Karnataka Districts')
 
 // Unzip and upload the ne_10m_urban_areas shapefile
 
-var urban = ee.FeatureCollection("users/ujavalgandhi/e2e/ne_10m_urban_areas");
+var urban = ee.FeatureCollection("users/sid4991/Urbanareas");
 
 // Visualize the collection
 Map.addLayer(urban, {color: 'blue'}, 'Urban Areas')
@@ -127,7 +127,7 @@ Map.addLayer(urban, {color: 'blue'}, 'Urban Areas')
 // CLIPPING
 
 var s2 = ee.ImageCollection("COPERNICUS/S2")
-var urban = ee.FeatureCollection("users/ujavalgandhi/e2e/ne_10m_urban_areas")
+var urban = ee.FeatureCollection("users/sid4991/Urbanareas")
 
 // Find the feature id by adding the layer to the map and using Inspector.
 var filtered = urban.filter(ee.Filter.eq('system:index', '00000000000000002bf8'))
@@ -153,7 +153,7 @@ Map.addLayer(clipped, rgbVis, 'Clipped')
 // EXPORT
 
 var s2 = ee.ImageCollection("COPERNICUS/S2")
-var urban = ee.FeatureCollection("users/ujavalgandhi/e2e/ne_10m_urban_areas")
+var urban = ee.FeatureCollection("users/sid4991/Urbanareas")
 
 var filtered = urban.filter(ee.Filter.eq('system:index', '00000000000000002bf8'))
 var geometry = filtered.geometry()
@@ -177,9 +177,9 @@ var exportImage = clipped.select('B.*')
 
 Export.image.toDrive({
     image: exportImage,
-    description: 'Bangalore_Composite_Raw',
+    description: 'WA_Composite_Raw',
     folder: 'earthengine',
-    fileNamePrefix: 'bangalore_composite_raw',
+    fileNamePrefix: 'WA_composite_raw',
     region: geometry,
     scale: 10,
     maxPixels: 1e9
@@ -196,9 +196,9 @@ Map.addLayer(visualized, {}, 'Visualized Image')
 
 Export.image.toDrive({
     image: visualized,
-    description: 'Bangalore_Composite_Visualized',
+    description: 'WA_Composite_Visualized',
     folder: 'earthengine',
-    fileNamePrefix: 'bangalore_composite_visualized',
+    fileNamePrefix: 'WA_composite_visualized',
     region: geometry,
     scale: 10,
     maxPixels: 1e9
